@@ -126,7 +126,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        Material itemid = null;
+        Material material;
         String itemname;
         short metaData = 0;
         Matcher parts = splitPattern.matcher(id);
@@ -139,32 +139,26 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
         itemname = itemname.toLowerCase(Locale.ENGLISH);
 
-        if (itemid == null) {
-            if (items.containsKey(itemname)) {
-                itemid = items.get(itemname);
-                if (durabilities.containsKey(itemname) && metaData == 0) {
-                    metaData = durabilities.get(itemname);
-                }
-            } else if (Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)) != null) {
-                itemid = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH));
-            } else {
-                try {
-                    itemid = Material.matchMaterial(itemname.toLowerCase(Locale.ENGLISH));
-                } catch (Throwable throwable) {
-                    throw new Exception(tl("unknownItemName", itemname), throwable);
-                }
+        if (items.containsKey(itemname)) {
+            material = items.get(itemname);
+            if (durabilities.containsKey(itemname) && metaData == 0) {
+                metaData = durabilities.get(itemname);
+            }
+        } else if (Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)) != null) {
+            material = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH));
+        } else {
+            try {
+                material = Material.matchMaterial(itemname.toLowerCase(Locale.ENGLISH));
+            } catch (Throwable throwable) {
+                throw new Exception(tl("unknownItemName", itemname), throwable);
             }
         }
 
-        if (itemid == null) {
+        if (material == null) {
             throw new Exception(tl("unknownItemName", itemname));
         }
 
-        final Material mat = itemid;
-        if (mat == null) {
-            throw new Exception(tl("unknownItemId", itemid));
-        }
-        ItemStack retval = new ItemStack(mat);
+        ItemStack retval = new ItemStack(material);
         if (nbtData.containsKey(itemname)) {
             String nbt = nbtData.get(itemname);
             if (nbt.startsWith("*")) {
@@ -172,14 +166,14 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
             retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
         }
-        if (mat == Material.MOB_SPAWNER) {
+        if (material == Material.MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
                 retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
-        } else if (mat == Material.MONSTER_EGG) {
+        } else if (material == Material.MONSTER_EGG) {
             EntityType type;
             try {
                 type = EntityType.fromId(metaData);
@@ -187,13 +181,13 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
-        } else if (mat.name().endsWith("POTION")
+        } else if (material.name().endsWith("POTION")
             && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
-            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
+            retval = ess.getPotionMetaProvider().createPotionItem(material, metaData);
         } else {
             retval.setDurability(metaData);
         }
-        retval.setAmount(mat.getMaxStackSize());
+        retval.setAmount(material.getMaxStackSize());
         return retval;
     }
 
