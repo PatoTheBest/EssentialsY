@@ -5,7 +5,7 @@ main: com.earth2me.essentials.spawn.EssentialsSpawn
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides spawn control commands, utilizing Essentials.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, MiniDigger]
 depend: [Essentials]
 commands:
   setspawn:

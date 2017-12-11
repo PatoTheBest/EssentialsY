@@ -5,5 +5,5 @@ main: com.earth2me.essentials.protect.EssentialsProtect
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides protection for various parts of the world.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, MiniDigger]
 softdepend: [Essentials]
