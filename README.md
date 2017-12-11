@@ -1,6 +1,6 @@
-# Essentials Y
+![](https://mc.jumpy91.de/essentialsy.png)
 
-[![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.jumpy91.de/job/EssentialsY/)
+[![Downloads](https://i.imgur.com/MMc0PJY.png)](https://ci.jumpy91.de/job/EssentialsY/)
 
 This is a fork of EssentialsX called EssentialsY.
 
